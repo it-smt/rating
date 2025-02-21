@@ -1,0 +1,40 @@
+.block-1 {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 0 0 42px 0;
+	&__delivery {
+		height: 29px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		position: relative;
+		color: rgb(255, 255, 255);
+		font-size: 12px;
+		line-height: 26px;
+		letter-spacing: 0%;
+		margin: 0 0 10px 0;
+	}
+	&__delivery::before,
+	&__delivery::after {
+		content: "";
+		position: absolute;
+		width: 20px;
+		height: 29px;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+	&__delivery::before {
+		left: -20px;
+		background-image: url("/img/fly-left.png");
+	}
+	&__delivery::after {
+		right: -20px;
+		background-image: url("/img/fly-right.png");
+	}
+
+	&__ratings {
+		display: flex;
+		align-items: flex-end;
+	}
+}

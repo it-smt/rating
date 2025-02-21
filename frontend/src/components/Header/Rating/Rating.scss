@@ -1,0 +1,32 @@
+.block-1 {
+	&__rating {
+		cursor: pointer;
+		margin: 0 0 0 16px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		position: relative;
+	}
+	&__rating:first-child {
+		margin: 0;
+	}
+	&__rating._active {
+		bottom: -22px;
+	}
+	&__rating._active img {
+		width: 70px;
+		height: 70px;
+	}
+	&__rating span {
+		display: none;
+		margin: 2px 0 0 0;
+		color: rgb(255, 255, 255);
+		font-size: 16px;
+		line-height: 12px;
+		letter-spacing: 0%;
+		text-align: center;
+	}
+	&__rating._active span {
+		display: block;
+	}
+}

@@ -1,0 +1,7 @@
+.env
+celerybeat-schedule
+celerybeat-schedule-shm
+celerybeat-schedule-wal
+credentials.json
+db.sqlite3
+__pycache__

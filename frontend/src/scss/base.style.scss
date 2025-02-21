@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300..900&display=swap");
+
+@font-face {
+	font-family: "SF Pro Display";
+	src: url("/fonts/SFPRODISPLAYREGULAR.ttf");
+	font-weight: 400;
+}
+
+@font-face {
+	font-family: "SF Pro Display";
+	src: url("fonts/SFPRODISPLAYMEDIUM.ttf");
+	font-weight: 500;
+}
+
+@font-face {
+	font-family: "SF Pro Display";
+	src: url("fonts/SFPRODISPLAYBOLD.ttf");
+	font-weight: 700;
+}
+
+body {
+	background-color: #241e31;
+	font-family: "SF Pro Display";
+	font-weight: 400;
+}
+
+.wrapper {
+	min-height: 100%;
+	overflow: hidden;
+}
+
+.container {
+	max-width: 393px;
+	padding: 0 25px;
+	margin: 0 auto;
+}
