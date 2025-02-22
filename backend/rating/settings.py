@@ -11,7 +11,12 @@ class EnvSettings(BaseSettings):
     DEBUG: bool
     CELERY_BROKER_URL: str
     CELERY_RESULT_BACKEND: str
-    CELERY_TIMEZONE: str
+    CELERY_REDBEAT_REDIS_URL: str
+    DB_USER: str
+    DB_PASSWORD: str
+    DB_NAME: str
+    DB_HOST: str
+    DB_PORT: int
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
@@ -74,8 +79,12 @@ WSGI_APPLICATION = "rating.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env_settings.DB_NAME,
+        "USER": env_settings.DB_USER,
+        "PASSWORD": env_settings.DB_PASSWORD,
+        "HOST": env_settings.DB_HOST,
+        "PORT": env_settings.DB_PORT,
     }
 }
 
@@ -141,6 +150,6 @@ CELERY_BEAT_SCHEDULE = {
 }
 CELERY_BEAT_SCHEDULER = "redbeat.RedBeatScheduler"
 CELERY_REDBEAT_KEY_PREFIX = "redbeat:"
-CELERY_REDBEAT_REDIS_URL = "redis://redis:6379/0"
+CELERY_REDBEAT_REDIS_URL = env_settings.CELERY_REDBEAT_REDIS_URL
 
-CELERY_TIMEZONE = env_settings.CELERY_TIMEZONE
+CELERY_TIMEZONE = TIME_ZONE

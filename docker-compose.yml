@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   redis:
@@ -8,6 +8,24 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    networks:
+      - rating_network
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$DB_USER -d $$DB_NAME"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    env_file:
+      - ./.env-non-dev
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     networks:
       - rating_network
 
@@ -22,7 +40,24 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    env_file:
+      - ./.env-non-dev
+    networks:
+      - rating_network
+
+  migrations:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: migrations
+    command: python manage.py migrate
+    depends_on:
+      postgres:
+        condition: service_healthy
     env_file:
       - ./.env-non-dev
     networks:
@@ -37,7 +72,10 @@ services:
     volumes:
       - ./backend:/app
     depends_on:
-      - redis
+      redis:
+        condition: service_started
+      migrations:
+        condition: service_completed_successfully
     env_file:
       - ./.env-non-dev
     networks:
@@ -52,8 +90,10 @@ services:
     volumes:
       - ./backend:/app
     depends_on:
-      - redis
-      - celery_beat
+      redis:
+        condition: service_started
+      celery_beat:
+        condition: service_started
     env_file:
       - ./.env-non-dev
     networks:
@@ -70,8 +110,10 @@ services:
     volumes:
       - ./backend:/app
     depends_on:
-      - redis
-      - celery_worker
+      redis:
+        condition: service_started
+      celery_worker:
+        condition: service_started
     env_file:
       - ./.env-non-dev
     networks:
@@ -82,9 +124,15 @@ services:
     container_name: frontend
     ports:
       - "5173:5173"
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - rating_network
 
 volumes:
   redis_data:
+  postgres_data:
 
 networks:
   rating_network:
