@@ -81,24 +81,6 @@ services:
     networks:
       - rating_network
 
-  celery_worker:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: celery_worker
-    command: celery -A rating worker --loglevel=info --pool=solo
-    volumes:
-      - ./backend:/app
-    depends_on:
-      redis:
-        condition: service_started
-      celery_beat:
-        condition: service_started
-    env_file:
-      - ./.env-non-dev
-    networks:
-      - rating_network
-
   flower:
     build:
       context: ./backend
@@ -112,7 +94,27 @@ services:
     depends_on:
       redis:
         condition: service_started
-      celery_worker:
+      # celery_worker:
+      #   condition: service_started
+    env_file:
+      - ./.env-non-dev
+    networks:
+      - rating_network
+
+  celery_worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: celery_worker
+    command: celery -A rating worker --loglevel=info --pool=solo
+    volumes:
+      - ./backend:/app
+    depends_on:
+      redis:
+        condition: service_started
+      celery_beat:
+        condition: service_started
+      flower:
         condition: service_started
     env_file:
       - ./.env-non-dev

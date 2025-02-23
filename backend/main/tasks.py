@@ -9,14 +9,13 @@ from django.db import transaction
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-from main.models import People
+from main.models import People, Rank
 
 
 @shared_task
 @transaction.atomic
 def fetch_call_signs_and_save_to_db() -> None:
     try:
-        print("begin")
         CREDENTIALS_FILE = f"{settings.BASE_DIR}/credentials.json"
 
         scope = [
@@ -41,11 +40,15 @@ def fetch_call_signs_and_save_to_db() -> None:
             sign.strip() for sign in call_signs if is_valid_call_sign(sign.strip())
         ]
         call_sign_counts: list[dict] = Counter(valid_call_signs)
+        rank = Rank.objects.get(title="Бронза")
+        if rank:
+            People.objects.all().delete()
+            for call_sign, count in call_sign_counts.items():
+                People.objects.create(
+                    call_sign=call_sign, orders_count=count, rank=rank
+                )
 
-        People.objects.all().delete()
-        for call_sign, count in call_sign_counts.items():
-            People.objects.create(call_sign=call_sign, orders_count=count)
-
-        return call_sign_counts
+            return call_sign_counts
+        return {"msg": "У вас нет базового ранга 'Бронза'"}
     except Exception as e:
         return {"error": str(e)}

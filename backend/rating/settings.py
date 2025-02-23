@@ -136,18 +136,18 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CELERY_BROKER_URL = env_settings.CELERY_BROKER_URL
 CELERY_RESULT_BACKEND = env_settings.CELERY_RESULT_BACKEND
 
-# CELERY_BEAT_SCHEDULE = {
-#     "fetch_call_signs_every_day_at_midnight": {
-#         "task": "main.tasks.fetch_call_signs_and_save_to_db",
-#         "schedule": crontab(hour=0, minute=0),
-#     },
-# }
 CELERY_BEAT_SCHEDULE = {
     "fetch_call_signs_every_day_at_midnight": {
         "task": "main.tasks.fetch_call_signs_and_save_to_db",
-        "schedule": crontab(minute="*"),
+        "schedule": crontab(hour=0, minute=0),
     },
 }
+# CELERY_BEAT_SCHEDULE = {
+#     "fetch_call_signs_every_day_at_midnight": {
+#         "task": "main.tasks.fetch_call_signs_and_save_to_db",
+#         "schedule": crontab(minute="*"),
+#     },
+# }
 CELERY_BEAT_SCHEDULER = "redbeat.RedBeatScheduler"
 CELERY_REDBEAT_KEY_PREFIX = "redbeat:"
 CELERY_REDBEAT_REDIS_URL = env_settings.CELERY_REDBEAT_REDIS_URL
