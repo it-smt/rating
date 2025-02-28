@@ -17,3 +17,13 @@ class SMsg(Schema):
     """Схема для сообщения."""
 
     msg: str
+
+
+class SRank(BaseModel):
+    """Схема для ранга."""
+
+    id: int
+    image: str | None
+    title: str
+    prize: int
+    orders_count: int

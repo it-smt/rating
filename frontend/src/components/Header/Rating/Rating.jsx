@@ -1,6 +1,6 @@
 import "./Rating.scss";
 
-export default function Rating({ active, setActive, rating, index }) {
+export default function Rating({ active, setActive, rank, index }) {
 	const handleClick = () => {
 		setActive(index);
 	};
@@ -13,8 +13,8 @@ export default function Rating({ active, setActive, rating, index }) {
 			id="ratingBlock"
 			onClick={handleClick}
 		>
-			<img src={rating.image} alt="" />
-			<span>{rating.name}</span>
+			<img src={`http://localhost:8000${rank.image}`} alt="" />
+			<span>{rank.title}</span>
 		</li>
 	);
 }

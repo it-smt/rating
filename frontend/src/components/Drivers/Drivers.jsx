@@ -1,17 +1,28 @@
-import { driversData } from "../../assets/drivers";
+import { useContext, useEffect } from "react";
+import { DriversContext } from "../../providers/DriversProvider";
+import { RankTitleContext } from "../../providers/RankTitleProvider";
+import { getDrivers } from "../../services/getDrivers";
 import Driver from "./Driver/Driver";
 import "./Drivers.scss";
 
 export default function Drivers() {
 	let index = 1;
+	const { drivers, setDrivers } = useContext(DriversContext);
+	const { rankTitle } = useContext(RankTitleContext);
 
-	const renderDrivers = (type, title, className) => (
+	useEffect(() => {
+		getDrivers(setDrivers, rankTitle);
+	}, [rankTitle]);
+
+	const renderDrivers = (grade, title, className) => (
 		<div className={`block-2__${className}`}>
 			<div className={`block-2__title ${className}`}>{title}</div>
-			{driversData
-				.filter(driver => driver.type === type)
-				.map((driver, i) => {
-					return <Driver key={i} driver={{ ...driver }} index={index++} />;
+			{drivers
+				.filter(driver => driver.grade === grade)
+				.map(driver => {
+					return (
+						<Driver key={driver.id} driver={{ ...driver }} index={index++} />
+					);
 				})}
 		</div>
 	);
