@@ -13,7 +13,7 @@ export default function Rating({ active, setActive, rank, index }) {
 			id="ratingBlock"
 			onClick={handleClick}
 		>
-			<img src={`http://localhost:8000${rank.image}`} alt="" />
+			<img src={`http://212.67.13.120:8000${rank.image}`} alt="" />
 			<span>{rank.title}</span>
 		</li>
 	);
